@@ -1,12 +1,10 @@
 import sqlite3
 from webscrape import webscrape 
 
-# Initialize the SQLite database
 def initialize_database():
     conn = sqlite3.connect("scraped_data.db")
     cursor = conn.cursor()
 
-    # Create a table to store scraped data
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS ScrapedData (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,7 +16,6 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-# Function to insert data into the database
 def insert_scraped_data(url, element_type, content):
     conn = sqlite3.connect("scraped_data.db")
     cursor = conn.cursor()
@@ -31,7 +28,6 @@ def insert_scraped_data(url, element_type, content):
     conn.commit()
     conn.close()
 
-# Function to fetch all data from the database
 def fetch_all_data():
     conn = sqlite3.connect("scraped_data.db")
     cursor = conn.cursor()
@@ -42,9 +38,7 @@ def fetch_all_data():
     conn.close()
     return rows
 
-# Scraping and storing data
 def scrape_and_store(url, element_type):
-    # Get elements using the webscrape class
     scraped_texts = webscrape.get_elements(url, element_type)
 
     if scraped_texts:
@@ -53,14 +47,11 @@ def scrape_and_store(url, element_type):
 
 def clear_table(table_name):
     try:
-        # Connect to the database
         conn = sqlite3.connect("scraped_data.db")
         cursor = conn.cursor()
 
-        # Clear the table
         cursor.execute(f"DELETE FROM {table_name};")
 
-        # Optionally, reset the auto-increment counter (if applicable)
         cursor.execute(f"DELETE FROM sqlite_sequence WHERE name = '{table_name}';")
 
         conn.commit()
@@ -74,15 +65,12 @@ def clear_table(table_name):
 
 def print_all_tables(database):
     try:
-        # Connect to the database
         conn = sqlite3.connect(database)
         cursor = conn.cursor()
 
-        # Query to list all tables
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = cursor.fetchall()
 
-        # Print the table names
         if tables:
             print("Tables in the database:")
             for table in tables:
@@ -114,5 +102,5 @@ if __name__ == "__main__":
         print(row)
  
 
-# uncomment below to clear table
+# Uncomment below to clear table
 # clear_table("ScrapedData") 
